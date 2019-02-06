@@ -1,7 +1,7 @@
 # NiBoBerry
 Fun with NIBObee Berry (nicai systems)
 
-I just got my BIBObee Berry up and running.
+I just got my [BIBObee Berry](http://www.nicai-systems.com/en/robotics/nibobee/berry) up and running.
 Now I'm going to share my stuff here for anybody that might be interested.
 
 ## Projects
