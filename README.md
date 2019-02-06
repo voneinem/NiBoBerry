@@ -13,3 +13,5 @@ Now I'm going to share my stuff here for anybody that might be interested.
 This script allows to send commands and receive replys from RPi to NIBObee.
 
 More about the serial protocol [here](http://www.nibo-roboter.de/wiki/Nibo_Serial_Protocol).
+
+### Next step is to provide a nice python API for the NIBObee sensors and actors.
