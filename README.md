@@ -14,4 +14,11 @@ This script allows to send commands and receive replys from RPi to NIBObee.
 
 More about the serial protocol [here](http://www.nibo-roboter.de/wiki/Nibo_Serial_Protocol).
 
-### Next step is to provide a nice python API for the NIBObee sensors and actors.
+### Python API for the NIBObee sensors and actors
+
+Import [nibo.py](./nibo.py) in order to use the API functions.
+```python
+from nibo import *
+```
+
+A first usage example is  [supply_voltage.py](./supply_voltage.py).
