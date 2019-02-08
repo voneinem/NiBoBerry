@@ -22,3 +22,8 @@ from nibo import *
 ```
 
 A first usage example is  [supply_voltage.py](./supply_voltage.py).
+
+A second usage example is [led_usage.py](./led_usage.py).
+For this one I created simple unit tests in [test_nibo.py](./test_nibo.py)
+
+Next step will be support for the front sensors...
