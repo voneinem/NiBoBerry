@@ -1,6 +1,7 @@
 import serial
 import time
 import threading
+import re
 
 ser = serial.Serial('/dev/serial0', 9600)
 ser.timeout = 1
@@ -67,4 +68,5 @@ def Send(command):
 
 def GetSupplyVoltageMillivolt():
     respone = Send('request get 2')
-    return respone
+    return int(re.findall(r'\d+', respone)[1])
+    
