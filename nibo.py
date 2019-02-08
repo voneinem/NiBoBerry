@@ -2,6 +2,17 @@ import serial
 import time
 import threading
 import re
+import enum 
+
+class Power(enum.Enum): 
+        off = 0
+        on = 1
+
+class LED(enum.Enum):
+        YellowLeft = 1
+        RedLeft = 2
+        RedRight = 4
+        YellowRight = 8
 
 ser = serial.Serial('/dev/serial0', 9600)
 ser.timeout = 1
@@ -44,29 +55,39 @@ def Stop():
         stopReadThread.set()
 
 def Delay(milliseconds):
-    time.sleep(milliseconds / 1000.0)
+        time.sleep(milliseconds / 1000.0)
 
 def Send(command):
-    global echoReceived
-    global responseReceived
-    global response
-    global echo
-    echo = []
-    response = []
-    echoReceived.clear()
-    responseReceived.clear()
-    print('<<', command)
-    ser.write(command.encode('utf-8'))
-    ser.write(b'\r\n')
-    echoReceived.wait(5)
-    # sEcho = ''.join([x.decode('utf-8') for x in echo])
-    # print('echo: ', sEcho)
-    responseReceived.wait(5)
-    sResponse = ''.join([x.decode('utf-8') for x in response])
-    print('>>', sResponse)
-    return sResponse
+        global echoReceived
+        global responseReceived
+        global response
+        global echo
+        echo = []
+        response = []
+        echoReceived.clear()
+        responseReceived.clear()
+        print('<<', command)
+        ser.write(command.encode('utf-8'))
+        ser.write(b'\r\n')
+        echoReceived.wait(5)
+        # sEcho = ''.join([x.decode('utf-8') for x in echo])
+        # print('echo: ', sEcho)
+        responseReceived.wait(5)
+        sResponse = ''.join([x.decode('utf-8') for x in response])
+        print('>>', sResponse)
+        return sResponse
 
 def GetSupplyVoltageMillivolt():
-    respone = Send('request get 2')
-    return int(re.findall(r'\d+', respone)[1])
-    
+        respone = Send('request get 2')
+        return int(re.findall(r'\d+', respone)[1])
+
+def GetLEDMask():        
+        respone = Send('request get 3')
+        return int(re.findall(r'\d+', respone)[1])
+
+def SetLED(led, powerStatus):
+        ledMask = GetLEDMask()
+        if powerStatus == Power.off:
+                ledMask &= ~led.value
+        else:
+                ledMask &= led.value
