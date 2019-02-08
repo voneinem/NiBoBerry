@@ -4,18 +4,19 @@ import threading
 import re
 import enum 
 
-class Power(enum.Enum): 
-        off = 0
-        on = 1
-
 class LED(enum.Enum):
         YellowLeft = 1
         RedLeft = 2
         RedRight = 4
         YellowRight = 8
 
-ser = serial.Serial('/dev/serial0', 9600)
-ser.timeout = 1
+try:
+        ser = serial.Serial('/dev/serial0', 9600)
+        ser.timeout = 1        
+except serial.SerialException as err:
+        # this is only for testing
+        print(err) 
+
 stopReadThread = threading.Event()
 echoReceived = threading.Event()
 responseReceived = threading.Event()
@@ -85,9 +86,14 @@ def GetLEDMask():
         respone = Send('request get 3')
         return int(re.findall(r'\d+', respone)[1])
 
+def SetLEDMask(mask):
+        Send('request set 3, %s'%(mask))
+
 def SetLED(led, powerStatus):
         ledMask = GetLEDMask()
-        if powerStatus == Power.off:
+        if powerStatus == 0:
                 ledMask &= ~led.value
         else:
-                ledMask &= led.value
+                ledMask |= led.value
+        Send('request set 3, %s'%(ledMask))
+                
