@@ -1,4 +1,5 @@
 import nibo
+from nibo import LED
 
 nibo.Start()
 
@@ -12,24 +13,24 @@ for i in range(1, 5):
 
     waitTimeMilliseconds = 100
 
-    nibo.SetLED(nibo.LED.YellowLeft, 1)
+    nibo.SetLED(LED.YellowLeft, 1)
     nibo.Delay(waitTimeMilliseconds)
-    nibo.SetLED(nibo.LED.YellowLeft, 0)
-    nibo.Delay(waitTimeMilliseconds)
-
-    nibo.SetLED(nibo.LED.YellowRight, 1)
-    nibo.Delay(waitTimeMilliseconds)
-    nibo.SetLED(nibo.LED.YellowRight, 0)
+    nibo.SetLED(LED.YellowLeft, 0)
     nibo.Delay(waitTimeMilliseconds)
 
-    nibo.SetLED(nibo.LED.RedLeft, 1)
+    nibo.SetLED(LED.YellowRight, 1)
     nibo.Delay(waitTimeMilliseconds)
-    nibo.SetLED(nibo.LED.RedLeft, 0)
+    nibo.SetLED(LED.YellowRight, 0)
     nibo.Delay(waitTimeMilliseconds)
 
-    nibo.SetLED(nibo.LED.RedRight, 1)
+    nibo.SetLED(LED.RedLeft, 1)
     nibo.Delay(waitTimeMilliseconds)
-    nibo.SetLED(nibo.LED.RedRight, 0)
+    nibo.SetLED(LED.RedLeft, 0)
+    nibo.Delay(waitTimeMilliseconds)
+
+    nibo.SetLED(LED.RedRight, 1)
+    nibo.Delay(waitTimeMilliseconds)
+    nibo.SetLED(LED.RedRight, 0)
     nibo.Delay(waitTimeMilliseconds)
 
 nibo.Stop()

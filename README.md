@@ -35,6 +35,9 @@ A second usage example is [led_usage.py](./led_usage.py).
 For this one I created simple unit tests in [test_nibo.py](./test_nibo.py)
 
 ```python
+# allow to omit nibo. of LED enum
+from nibo import LED
+
 # get the binary mask for all LEDs once
 ledMask = nibo.GetLEDMask()
 
@@ -42,10 +45,10 @@ ledMask = nibo.GetLEDMask()
 nibo.SetLEDMask(0)
 
 # switch left yellow LED on
-nibo.SetLED(nibo.LED.YellowLeft, 1)
+nibo.SetLED(LED.YellowLeft, 1)
 
 # switch left yellow LED off
-nibo.SetLED(nibo.LED.YellowLeft, 0)
+nibo.SetLED(LED.YellowLeft, 0)
 ```
 
 #### Feelers
