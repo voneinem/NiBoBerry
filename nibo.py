@@ -4,11 +4,37 @@ import threading
 import re
 import enum 
 
+# Register NIBObee
+#  0: [r ] BOT ID = 0x4e62
+#  1: [r ] Version
+#  2: [r ] Supply Voltage [mV]
+#  3: [rw] LEDs
+#  4: [r ] Sense
+#  6: [rw] Motor Mode 
+#  7: [rw] Motor PWM L 
+#  8: [rw] Motor PWM R 
+#  9: [rw] Motor PID L 
+# 10: [rw] Motor PID R 
+# 13: [r ] Odometry L 
+# 14: [r ] Odometry R 
+# 16: [r ] Line C
+# 17: [r ] Line L
+# 18: [r ] Line R
+
+# This can be used to enable printing the communication to the console
+PrintCommunication = False
+
 class LED(enum.Enum):
         YellowLeft = 1
         RedLeft = 2
         RedRight = 4
         YellowRight = 8
+
+class Feeler(enum.Enum):
+        LeftOuter = 1
+        LeftInner = 2
+        RightOuter = 16
+        RightInner = 32
 
 try:
         ser = serial.Serial('/dev/serial0', 9600)
@@ -63,19 +89,21 @@ def Send(command):
         global responseReceived
         global response
         global echo
+        global PrintCommunication
+
         echo = []
         response = []
         echoReceived.clear()
         responseReceived.clear()
-        print('<<', command)
+        if PrintCommunication : print('<<', command)
         ser.write(command.encode('utf-8'))
         ser.write(b'\r\n')
         echoReceived.wait(5)
         # sEcho = ''.join([x.decode('utf-8') for x in echo])
-        # print('echo: ', sEcho)
+        # if PrintCommunication : print('echo: ', sEcho)
         responseReceived.wait(5)
         sResponse = ''.join([x.decode('utf-8') for x in response])
-        print('>>', sResponse)
+        if PrintCommunication : print('>>', sResponse)
         return sResponse
 
 def GetSupplyVoltageMillivolt():
@@ -96,4 +124,14 @@ def SetLED(led, powerStatus):
         else:
                 ledMask |= led.value
         Send('request set 3, %s'%(ledMask))
+
+def GetFeeler():
+        respone = Send('request get 4')
+        feelerMask = int(re.findall(r'\d+', respone)[1])
+        flo = bool(feelerMask & Feeler.LeftOuter.value) 
+        fli = bool(feelerMask & Feeler.LeftInner.value) 
+        fro = bool(feelerMask & Feeler.RightOuter.value) 
+        fri = bool(feelerMask & Feeler.RightInner.value) 
+        return flo, fli, fro, fri
+
                 

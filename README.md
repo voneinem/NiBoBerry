@@ -21,9 +21,40 @@ Import [nibo.py](./nibo.py) in order to use the API functions.
 from nibo import *
 ```
 
+#### Supply Voltage
+
 A first usage example is  [supply_voltage.py](./supply_voltage.py).
+
+```python
+voltageMillivolt = nibo.GetSupplyVoltageMillivolt()
+```
+
+#### LEDs
 
 A second usage example is [led_usage.py](./led_usage.py).
 For this one I created simple unit tests in [test_nibo.py](./test_nibo.py)
 
-Next step will be support for the front sensors...
+```python
+# get the binary mask for all LEDs once
+ledMask = nibo.GetLEDMask()
+
+# set the binary mask for all LEDs once
+nibo.SetLEDMask(0)
+
+# switch left yellow LED on
+nibo.SetLED(nibo.LED.YellowLeft, 1)
+
+# switch left yellow LED off
+nibo.SetLED(nibo.LED.YellowLeft, 0)
+```
+
+#### Feelers
+
+An example how to get the feeler status is [feelers_usage.py](./feelers_usage.py).
+
+```python
+    flo, fli, fro, fri = nibo.GetFeeler()
+    print('LO = %s, LI = %s, RO = %s, RI = %s'%(flo, fli, fro, fri))
+```
+
+#### Next step is support for the motors :)
