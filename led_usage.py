@@ -1,6 +1,8 @@
 import nibo
 from nibo import LED
 
+nibo.PrintCommunication = True
+
 nibo.Start()
 
 nibo.SetLEDMask(0)
@@ -31,6 +33,16 @@ for i in range(1, 5):
     nibo.SetLED(LED.RedRight, 1)
     nibo.Delay(waitTimeMilliseconds)
     nibo.SetLED(LED.RedRight, 0)
+    nibo.Delay(waitTimeMilliseconds)
+
+    nibo.SetLED(LED.RedUpper, 1)
+    nibo.Delay(waitTimeMilliseconds)
+    nibo.SetLED(LED.RedUpper, 0)
+    nibo.Delay(waitTimeMilliseconds)
+
+    nibo.SetLED(LED.GreenUpper, 1)
+    nibo.Delay(waitTimeMilliseconds)
+    nibo.SetLED(LED.GreenUpper, 0)
     nibo.Delay(waitTimeMilliseconds)
 
 nibo.Stop()

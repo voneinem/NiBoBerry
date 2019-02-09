@@ -4,6 +4,16 @@ import threading
 import re
 import enum 
 
+try:
+        import RPi.GPIO as GPIO
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(18, GPIO.OUT, initial = 0)
+        GPIO.setup(22, GPIO.OUT, initial = 0)
+
+except RuntimeError as err:
+        # this is only for testing - This module can only be run on a Raspberry Pi!
+        print(err)
+
 # Register NIBObee
 #  0: [r ] BOT ID = 0x4e62
 #  1: [r ] Version
@@ -29,6 +39,8 @@ class LED(enum.Enum):
         RedLeft = 2
         RedRight = 4
         YellowRight = 8
+        GreenUpper = 16
+        RedUpper = 32
 
 class Feeler(enum.Enum):
         LeftOuter = 1
@@ -106,24 +118,34 @@ def Send(command):
         if PrintCommunication : print('>>', sResponse)
         return sResponse
 
+def SetGPIO(pin, value):
+        GPIO.output(pin, value)
+
 def GetSupplyVoltageMillivolt():
         respone = Send('request get 2')
         return int(re.findall(r'\d+', respone)[1])
 
 def GetLEDMask():        
+        # TODO: Add upper GPIO LEDs
         respone = Send('request get 3')
         return int(re.findall(r'\d+', respone)[1])
 
 def SetLEDMask(mask):
+        # TODO: Add upper GPIO LEDs
         Send('request set 3, %s'%(mask))
 
 def SetLED(led, powerStatus):
-        ledMask = GetLEDMask()
-        if powerStatus == 0:
-                ledMask &= ~led.value
+        if led == LED.GreenUpper:
+                SetGPIO(18, powerStatus)
+        elif led == LED.RedUpper:
+                SetGPIO(22, powerStatus)
         else:
-                ledMask |= led.value
-        Send('request set 3, %s'%(ledMask))
+                ledMask = GetLEDMask()
+                if powerStatus == 0:
+                        ledMask &= ~led.value
+                else:
+                        ledMask |= led.value
+                Send('request set 3, %s'%(ledMask))
 
 def GetFeeler():
         respone = Send('request get 4')
