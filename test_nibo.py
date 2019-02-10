@@ -43,5 +43,18 @@ class TestNiboFunctions(unittest.TestCase):
         self.assertFalse(fro)
         self.assertTrue(fri)
 
+### Push Buttons ###
+    def test_GetPushButton_NotPushed(self):
+        nibo.GetGPIO = MagicMock(return_value=1)
+        a, b = nibo.GetPushButton()     
+        self.assertFalse(a)
+        self.assertFalse(b)   
+
+    def test_GetPushButton_Pushed(self):
+        nibo.GetGPIO = MagicMock(return_value=0)
+        a, b = nibo.GetPushButton()     
+        self.assertTrue(a)
+        self.assertTrue(b)   
+
 if __name__ == '__main__':
     unittest.main()
