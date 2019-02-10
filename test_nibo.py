@@ -56,5 +56,14 @@ class TestNiboFunctions(unittest.TestCase):
         self.assertTrue(a)
         self.assertTrue(b)   
 
+### Motors ###
+    def test_Motors(self):
+        nibo.Send = MagicMock()
+        nibo.SetMotorMode(3)
+        nibo.Send.assert_called_with('request set 6, 3')
+        nibo.SetMotors(42,-42)
+        nibo.Send.assert_called_with('request set 7, 42 set 8, -42')
+
+
 if __name__ == '__main__':
     unittest.main()

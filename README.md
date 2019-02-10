@@ -71,4 +71,15 @@ a, b = nibo.GetPushButton()
 print('Button: A = %s, B = %s'%(a, b))
 ```
 
-#### Next step is support for the motors :)
+#### Motors
+
+An example how to use the motors is [motor_usage.py](./motor_usage.py).
+
+```python
+nibo.SetMotorMode(3) # I believe this is PID motor control using odometry
+nibo.SetMotors(-42,42) # turn coutner clockwise
+```
+
+#### Next step is to get odometry values for the motors
+
+...

@@ -166,3 +166,9 @@ def GetPushButton():
         a = not bool(GetGPIO(15))
         b = not bool(GetGPIO(16))
         return a,b 
+
+def SetMotorMode(tbd):
+        Send('request set 6, %s'%(tbd))
+
+def SetMotors(speedLeft, speedRight):
+        Send('request set 7, %s set 8, %s'%(speedLeft, speedRight))
