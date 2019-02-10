@@ -90,6 +90,6 @@ odoLeft, odoRight = nibo.GetOdometry()
 print('Odometry - Left = %s, Right = %s'%(odoLeft, odoRight))
 ```
 
-#### Next step is to get odometry values for the motors
+#### Next step is to get video processing running with OpenCV :)
 
 ...
