@@ -1,4 +1,5 @@
 # NiBoBerry
+
 Fun with NIBObee Berry (nicai systems)
 
 I just got my [NIBObee Berry](http://www.nicai-systems.com/en/robotics/nibobee/berry) up and running.
@@ -6,7 +7,7 @@ Now I'm going to share my stuff here for anybody that might be interested.
 
 ## Projects
 
-### Simple serial communication 
+### Simple serial communication
 
 [ledserial.py](./ledserial.py)
 
@@ -17,6 +18,7 @@ More about the serial protocol [here](http://www.nibo-roboter.de/wiki/Nibo_Seria
 ### Python API for the NIBObee sensors and actors
 
 Import [nibo.py](./nibo.py) in order to use the API functions.
+
 ```python
 from nibo import *
 ```
