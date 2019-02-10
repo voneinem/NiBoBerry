@@ -74,6 +74,7 @@ print('Button: A = %s, B = %s'%(a, b))
 #### Motors
 
 An example how to use the motors is [motor_usage.py](./motor_usage.py).
+More on the PID controller [here](http://www.nibo-roboter.de/wiki/NIBObee/Motorregelung).
 
 ```python
 nibo.SetMotorMode(3) # I believe this is PID motor control using odometry
