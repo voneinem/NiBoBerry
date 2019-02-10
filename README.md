@@ -81,6 +81,15 @@ nibo.SetMotorMode(3) # I believe this is PID motor control using odometry
 nibo.SetMotors(-42,42) # turn coutner clockwise
 ```
 
+#### Odometry
+
+An example how to use the motors is embedded in [motor_usage.py](./motor_usage.py).
+
+```python
+odoLeft, odoRight = nibo.GetOdometry()
+print('Odometry - Left = %s, Right = %s'%(odoLeft, odoRight))
+```
+
 #### Next step is to get odometry values for the motors
 
 ...

@@ -128,13 +128,13 @@ def SetGPIO(pin, value):
         GPIO.output(pin, value)
 
 def GetSupplyVoltageMillivolt():
-        respone = Send('request get 2')
-        return int(re.findall(r'\d+', respone)[1])
+        response = Send('request get 2')
+        return int(re.findall(r'\d+', response)[1])
 
 def GetLEDMask():        
         # TODO: Add upper GPIO LEDs
-        respone = Send('request get 3')
-        return int(re.findall(r'\d+', respone)[1])
+        response = Send('request get 3')
+        return int(re.findall(r'\d+', response)[1])
 
 def SetLEDMask(mask):
         # TODO: Add upper GPIO LEDs
@@ -172,3 +172,8 @@ def SetMotorMode(tbd):
 
 def SetMotors(speedLeft, speedRight):
         Send('request set 7, %s set 8, %s'%(speedLeft, speedRight))
+
+def GetOdometry():
+        response = Send('request get 13 get 14')
+        numbers = re.findall(r'[-+]?\d+', response)
+        return (int(numbers[1]), int(numbers[3]))

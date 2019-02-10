@@ -64,6 +64,15 @@ class TestNiboFunctions(unittest.TestCase):
         nibo.SetMotors(42,-42)
         nibo.Send.assert_called_with('request set 7, 42 set 8, -42')
 
+### Odometry ###
+    def test_Odometry(self):
+        nibo.Send = MagicMock(return_value='reply set 13, 168 set 14, -171')
+        odoLeft, odoRight = nibo.GetOdometry()
+        nibo.Send.assert_called_with('request get 13 get 14')
+        self.assertEquals(odoLeft, 168)
+        self.assertEquals(odoRight, -171)
+
+
 
 if __name__ == '__main__':
     unittest.main()
