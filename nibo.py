@@ -6,9 +6,12 @@ import enum
 
 try:
         import RPi.GPIO as GPIO
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(18, GPIO.OUT, initial = 0)
         GPIO.setup(22, GPIO.OUT, initial = 0)
+        GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
+        GPIO.setup(16, GPIO.IN, GPIO.PUD_UP)
 
 except RuntimeError as err:
         # this is only for testing - This module can only be run on a Raspberry Pi!
@@ -118,6 +121,9 @@ def Send(command):
         if PrintCommunication : print('>>', sResponse)
         return sResponse
 
+def GetGPIO(pin):
+        return GPIO.input(pin)
+
 def SetGPIO(pin, value):
         GPIO.output(pin, value)
 
@@ -156,4 +162,7 @@ def GetFeeler():
         fri = bool(feelerMask & Feeler.RightInner.value) 
         return flo, fli, fro, fri
 
-                
+def GetPushButton():
+        a = not bool(GetGPIO(15))
+        b = not bool(GetGPIO(16))
+        return a,b 

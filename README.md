@@ -62,4 +62,13 @@ An example how to get the feeler status is [feelers_usage.py](./feelers_usage.py
     print('LO = %s, LI = %s, RO = %s, RI = %s'%(flo, fli, fro, fri))
 ```
 
+#### Bush Button
+
+An example how to get the upper push button status is [pushbutton_usage.py](./pushbutton_usage.py).
+
+```python
+    a, b = nibo.GetPushButton()
+    print('Button: A = %s, B = %s'%(a, b))
+```
+
 #### Next step is support for the motors :)
