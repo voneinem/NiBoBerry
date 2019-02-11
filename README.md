@@ -90,6 +90,14 @@ odoLeft, odoRight = nibo.GetOdometry()
 print('Odometry - Left = %s, Right = %s'%(odoLeft, odoRight))
 ```
 
-#### Next step is to get video processing running with OpenCV :)
+#### Video processing with OpenCV
+
+I want the NIBOBee to follow a green ball.
+First I compiled OpenCV on the RPi as described [here](https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/).
+This takes some time (hours)...
+Next I combined [ball tracking](https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/) with [PiCamera](https://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/).
+The result (work in progress) is in [ball_tracking_pi.py](./ball_tracking_pi.py).
+
+#### Next step is to control the motors with the signal from the camera
 
 ...
