@@ -21,31 +21,52 @@ import os
 from flask import Flask, render_template, Response
 import threading
 import io
+import nibo
+from nibo import LED
+from timeit import default_timer as timer
+
+nibo.PrintCommunication = False
 
 webFrame = None
+
+nibo.Start()
+nibo.Delay(1000)
+nibo.SetMotors(0,0)
+nibo.SetMotorMode(2) 
+
+print('Press Button A to start - Button B to stop')
 
 def ImageProcessingThread(dummy):
     global webFrame
     # define the lower and upper boundaries of the "green"
     # ball in the HSV color space, then initialize the
     # list of tracked points
+    # greenLower = (29, 86, 6)
     greenLower = (29, 86, 6)
-    greenUpper = (64, 255, 255)
+    greenUpper = (80, 255, 255)  
+    motorsOn = False  
+    fps = 0
 
     # initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera()
-    camera.resolution = (640, 480)
+    resolution = (640, 480)
+    camera.resolution = resolution
     camera.framerate = 32
-    rawCapture = PiRGBArray(camera, size=(640, 480))
+    rawCapture = PiRGBArray(camera, size=resolution)
     
     # allow the camera or video file to warm up
     time.sleep(0.1)
 
     # capture frames from the camera
     for image in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+        start = timer()
+        targetFound = False
             # grab the raw NumPy array representing the image, then initialize the timestamp
             # and occupied/unoccupied text
         frame = image.array
+
+        if (not targetFound): ret, webFrame = cv2.imencode('.jpg',frame)
+
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
@@ -56,7 +77,8 @@ def ImageProcessingThread(dummy):
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)
 
-    #	cv2.imshow("mask", mask)
+        # show the mask on the web stream
+        # ret, webFrame = cv2.imencode('.jpg',mask)
 
         # find contours in the mask and initialize the current
         # (x, y) center of the ball
@@ -75,11 +97,12 @@ def ImageProcessingThread(dummy):
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
-            print('Object - x = %s \t y = %s\t r = %s' %
-                (int(x) - 320, int(y), int(radius)))
+            print('Object - x = %s \t y = %s\t r = %s\t fps=%s' %
+                (int(x) - 320, int(y), int(radius), int(fps)))
 
             # only proceed if the radius meets a minimum size
-            if radius > 5:
+            if radius > 10 and y > (resolution[1] * 0.5):
+                targetFound = True
 
                 # draw the circle and centroid on the frame,
                 # then update the list of tracked points
@@ -87,19 +110,37 @@ def ImageProcessingThread(dummy):
                             (0, 255, 255), 2)
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
+                # show the frame on the web stream
                 ret, webFrame = cv2.imencode('.jpg',frame)
 
-            # show the frame to our screen
-            #	cv2.imshow("Frame", frame)
+                halfWidth = resolution[0] / 2
+                e = ((int(x) - halfWidth))/halfWidth # normalize center deviation from -1 to 1
 
-        key = cv2.waitKey(1) & 0xFF
+                print('\t\t\t\t\t e:' + str(e))
+                nibo.SetLED(LED.YellowLeft, -1 <= e <= -0.5)
+                nibo.SetLED(LED.RedLeft, -0.5 <= e <= 0.1)
+                nibo.SetLED(LED.RedRight, -0.1 <= e <= 0.5)
+                nibo.SetLED(LED.YellowRight, 0.5 <= e <= 1)
 
-        # if the 'q' key is pressed, stop the loop
-        if key == ord("q"):
-            break
+                speed = 600
+                gain = 0.2
+                powerLeft = int(speed * (1 + e * gain))
+                powerRight = int(speed * (1 - e * gain))
+                if (motorsOn): nibo.SetMotors(powerLeft,powerRight)    
+            else:
+                targetFound = False                        
+
+        a, b = nibo.GetPushButton()
+        if(a):
+            motorsOn = True
+        elif(b):
+            print('Button B') 
+            nibo.SetMotors(0,0)
+            motorsOn = False
 
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
+        fps = 1 / (timer() - start)
 
 imageProcessing = threading.Thread(target = ImageProcessingThread, args= (0.001, ))
 imageProcessing.start()
