@@ -86,7 +86,7 @@ def ReadThread(waitTime):
 
                 stopReadThread.wait(waitTime)
 
-reader = threading.Thread(target = ReadThread, args= (0.001, ))
+reader = threading.Thread(target = ReadThread, args= (0.0001, ))
 
 def Start():
         reader.start()
