@@ -98,6 +98,23 @@ This takes some time (hours)...
 Next I combined [ball tracking](https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/) with [PiCamera](https://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/).
 The result (work in progress) is in [ball_tracking_pi.py](./ball_tracking_pi.py).
 
-#### Next step is to control the motors with the signal from the camera
+#### Control the motors with the signal from the camera
 
-...
+The result is in [ball_tracking_pi.py](./ball_tracking_pi.py).
+NIBOBerry will try to follow a green ball it sees.
+
+if you add the following line before ```exit 0``` in your /etc/rc.local...
+
+```bash
+sudo python3 home/pi/ball_tracking_pi.py &
+```
+
+... NIBOBerry will start ball_tracking_pi.py during boot.
+Once the programm is up and running the top green LED will be on.
+At this point ball tracking is active and you can watch the video over http on port 5000 (given Nibo has WLAN and you know the IP).
+Nibo will indicate the rough direction where it sees the ball via LEDs: yellow left, red left, ...
+If both red LEDs are on Nibo has the ball right in front.
+
+When you press button A Nibo will switch on the motors and start moving towards the ball.
+You can be mean and move the ball somewhere else. Nibo should recognize and follow.
+Have fun...

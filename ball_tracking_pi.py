@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # This code is inspired by
 # https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/
 # https://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/
@@ -28,6 +29,8 @@ from timeit import default_timer as timer
 nibo.PrintCommunication = False
 
 webFrame = None
+
+nibo.SetLED(LED.GreenUpper, 1)
 
 nibo.Start()
 nibo.Delay(1000)
@@ -133,9 +136,13 @@ def ImageProcessingThread(dummy):
         a, b = nibo.GetPushButton()
         if(a):
             motorsOn = True
+            nibo.SetLED(LED.GreenUpper, 0)
+            nibo.SetLED(LED.RedUpper, 1)
         elif(b):
             print('Button B') 
             nibo.SetMotors(0,0)
+            nibo.SetLED(LED.GreenUpper, 1)
+            nibo.SetLED(LED.RedUpper, 0)
             motorsOn = False
 
         # clear the stream in preparation for the next frame
