@@ -62,7 +62,7 @@ flo, fli, fro, fri = nibo.GetFeeler()
 print('LO = %s, LI = %s, RO = %s, RI = %s'%(flo, fli, fro, fri))
 ```
 
-#### Bush Button
+#### Push Button
 
 An example how to get the upper push button status is [pushbutton_usage.py](./pushbutton_usage.py).
 
